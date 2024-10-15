@@ -47,6 +47,7 @@ const TotalDebitCredit = () => {
             const { type, sum } = total;
 
             const isTypeCredit = type === TRANSACTION_TYPES_OBJECT.credit;
+
             return (
               <div
                 key={index}

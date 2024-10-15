@@ -45,7 +45,6 @@ const Dashboard = () => {
     try {
       setIsDeleteLoading(true);
       const url = API_DELETE_TRANSACTION + deleteTransactionId;
-
       const res = await axios.delete(url, {
         headers: TRANSACTION_HEADERS(userId),
       });
@@ -53,6 +52,7 @@ const Dashboard = () => {
       if (res.status === SUCCESS_OK) {
         handleTransactionDeleteSuccess();
       } else {
+        toast.error("Responded with status" + res.status);
       }
     } catch (error) {
       toast.error(error.message);
@@ -95,7 +95,7 @@ const Dashboard = () => {
     if (showAlertModal) {
       return (
         <ConfirmModal
-          toggleModal={() => setShowAlertModal(false)}
+          onClose={() => setShowAlertModal(false)}
           setActionId={setDeleteTransactionId}
           actionLoading={isDeleteLoading}
           action={"delete"}

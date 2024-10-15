@@ -1,6 +1,7 @@
 import React, { useContext, useState } from "react";
 import axios from "axios";
 import toast from "react-hot-toast";
+import { v4 } from "uuid";
 
 import { TransactionContext } from "../context/transactionContext";
 import ConfirmModal from "../components/ConfirmModal";
@@ -34,10 +35,15 @@ const Transactions = () => {
     transactionsError,
   } = useContext(TransactionContext);
 
-  //This state can be removed
   const [editTransactionId, setEditTransactionId] = useState(null);
 
   const { userId } = useContext(UserContext);
+
+  const handleTransactionDeleteSuccess = () => {
+    toast.success("Transaction deleted");
+    transactionsMutate();
+    totalDebitCreditTransactionsMutate();
+  };
 
   const handleTransactionDelete = async () => {
     try {
@@ -48,9 +54,7 @@ const Transactions = () => {
       });
 
       if (res.status === SUCCESS_OK) {
-        toast.success("Transaction deleted");
-        transactionsMutate();
-        totalDebitCreditTransactionsMutate();
+        handleTransactionDeleteSuccess();
       }
     } catch (error) {
       toast.error(error.message);
@@ -63,41 +67,15 @@ const Transactions = () => {
     }
   };
 
-  //Move this transations to seperate function
-  //Change this function to more readable
-  let transactionsData = [];
-  transactions?.forEach(
-    ({ transaction_name, id, category, amount, date, type }) => {
-      //Do conditional encapsulation
-      if (activeTab === TAB_OPTIONS.transactions || activeTab === type) {
-        transactionsData.push(
-          <TransactionItem
-            key={id}
-            data={{
-              transaction_name,
-              id,
-              category,
-              amount,
-              date,
-              type,
-            }}
-            setEditTransactionId={setEditTransactionId}
-            setShowEditTransactionModal={setShowEditTransactionModal}
-            setShowAlertModal={setShowAlertModal}
-            setDeleteTransactionId={setDeleteTransactionId}
-          />
-        );
-      }
-      return null;
-    }
-  );
-
   const renderAllTransactionTypes = () => {
+    if (transactions.length === 0 || !transactions) {
+      return <EmptyView />;
+    }
     const data = transactions?.map(
       ({ transaction_name, id, category, amount, date, type }) => {
         return (
           <TransactionItem
-            key={id}
+            key={v4()}
             data={{
               transaction_name,
               id,
@@ -114,16 +92,43 @@ const Transactions = () => {
         );
       }
     );
+
     return data;
   };
 
   const renderCreditTransactions = () => {
-    const data = transactions?.map(
+    let filteredData = [];
+    transactions?.forEach((data) => {
+      if (data.type === TAB_OPTIONS.credit) {
+        filteredData.push(
+          <TransactionItem
+            key={v4()}
+            data={{
+              ...data,
+            }}
+            setEditTransactionId={setEditTransactionId}
+            setShowEditTransactionModal={setShowEditTransactionModal}
+            setShowAlertModal={setShowAlertModal}
+            setDeleteTransactionId={setDeleteTransactionId}
+          />
+        );
+      }
+    });
+    console.log(filteredData);
+    if (filteredData.length === 0) {
+      return <EmptyView />;
+    }
+    return filteredData;
+  };
+
+  const renderDebitTransactions = () => {
+    const filteredData = [];
+    transactions?.forEach(
       ({ transaction_name, id, category, amount, date, type }) => {
-        if (type === "credit") {
-          return (
+        if (type === TAB_OPTIONS.debit) {
+          filteredData.push(
             <TransactionItem
-              key={id}
+              key={v4()}
               data={{
                 transaction_name,
                 id,
@@ -139,10 +144,26 @@ const Transactions = () => {
             />
           );
         }
-        return <></>;
       }
     );
-    return data;
+
+    if (filteredData.length === 0) {
+      return <EmptyView />;
+    }
+    return filteredData;
+  };
+
+  const renderTransactionDataByTab = () => {
+    switch (true) {
+      case activeTab === TAB_OPTIONS.transactions:
+        return renderAllTransactionTypes();
+      case activeTab === TAB_OPTIONS.credit:
+        return renderCreditTransactions();
+      case activeTab === TAB_OPTIONS.debit:
+        return renderDebitTransactions();
+      default:
+        break;
+    }
   };
 
   const RenderTransactions = () => {
@@ -154,11 +175,11 @@ const Transactions = () => {
           </div>
         ) : (
           <>
-            {transactionsData?.length === 0 ? (
+            {transactions?.length === 0 ? (
               <EmptyView />
             ) : (
               <ul className="bg-white rounded-xl p-2 px-4 flex flex-col gap-2 mt-2">
-                {transactionsData.map((t) => t)}
+                {renderTransactionDataByTab()}
               </ul>
             )}
           </>
@@ -171,7 +192,7 @@ const Transactions = () => {
     if (showAlertModal) {
       return (
         <ConfirmModal
-          toggleModal={() => setShowAlertModal(false)}
+          onClose={() => setShowAlertModal(false)}
           setActionId={setDeleteTransactionId}
           isLoading={isDeleteLoading}
           action={ACTION_TYPES.delete}
@@ -184,7 +205,7 @@ const Transactions = () => {
   const getTransaction = () => {
     let transactionData;
     if (editTransactionId) {
-      transactionData = transactions.filter(
+      transactionData = transactions.find(
         (transaction) => transaction.id === editTransactionId
       );
     }

@@ -126,9 +126,8 @@ const Sidebar = () => {
           actionHandler={handleLogout}
         />
       );
-    } else {
-      <></>;
     }
+    return <></>;
   };
 
   return (

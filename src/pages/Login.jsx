@@ -13,6 +13,10 @@ import {
   LOCALSTORAGE_KEY,
   LOGIN_HEADERS,
 } from "../constants";
+import {
+  addDataIntoLocalStorage,
+  getDataFromLocalStorage,
+} from "../utils/localStorageUtils";
 
 const Login = ({ admin }) => {
   const [showPassword, setShowPassword] = useState(false);
@@ -25,7 +29,7 @@ const Login = ({ admin }) => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (localStorage.getItem(LOCALSTORAGE_KEY)) {
+    if (getDataFromLocalStorage(LOCALSTORAGE_KEY)) {
       navigate(DASHBOARD_ROUTE);
     }
   }, []);
@@ -49,6 +53,21 @@ const Login = ({ admin }) => {
     return true;
   };
 
+  const handleLoginSuccess = (data) => {
+    setFormData({
+      password: "",
+      email: "",
+    });
+    addDataIntoLocalStorage(LOCALSTORAGE_KEY, {
+      admin: admin,
+      userId: data.get_user_id[0].id,
+    });
+    toast.success("Login successful", { duration: 1000 });
+    setTimeout(() => {
+      navigate(DASHBOARD_ROUTE);
+    }, 1000);
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     const { email, password } = formData;
@@ -56,7 +75,6 @@ const Login = ({ admin }) => {
       setLoading(true);
       if (handleValidation()) {
         const url = API_GET_USER_ID;
-
         const response = await axios.post(
           url,
           {
@@ -67,28 +85,9 @@ const Login = ({ admin }) => {
             headers: LOGIN_HEADERS,
           }
         );
-
         const { data } = response;
-
-        //Move the success handling to a function
         if (response.status === 200) {
-          setFormData({
-            password: "",
-            email: "",
-          });
-          localStorage.setItem(
-            LOCALSTORAGE_KEY,
-            JSON.stringify({
-              admin: admin,
-              userId: data.get_user_id[0].id,
-            })
-          );
-
-          toast.success("Login successful", { duration: 1000 });
-
-          setTimeout(() => {
-            navigate(DASHBOARD_ROUTE);
-          }, 1000);
+          handleLoginSuccess(data);
         } else {
           toast.error("Responded with status code" + response.status);
         }

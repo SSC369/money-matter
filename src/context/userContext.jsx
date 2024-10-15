@@ -2,16 +2,16 @@ import { createContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { LOCALSTORAGE_KEY, LOGIN_ROUTE } from "../constants";
+import { getDataFromLocalStorage } from "../utils/localStorageUtils";
 
 export const UserContext = createContext({});
 
 export const UserContextProvider = ({ children }) => {
-  const localStorageUserData = localStorage.getItem(LOCALSTORAGE_KEY);
   const navigate = useNavigate();
-  const userData = JSON.parse(localStorageUserData);
+  const userData = getDataFromLocalStorage(LOCALSTORAGE_KEY);
 
   useEffect(() => {
-    if (!localStorageUserData) {
+    if (!userData) {
       navigate(LOGIN_ROUTE);
     }
   }, []);
