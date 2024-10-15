@@ -11,8 +11,9 @@ import {
   TRANSACTION_ROUTE,
   DASHBOARD_ROUTE,
   ADMIN_LOGIN_ROUTE,
-} from "./contants";
+} from "./constants";
 import { UserContextProvider } from "./context/userContext";
+import { TransactionContextProvider } from "./context/transactionContext";
 
 const App = () => {
   return (
@@ -20,7 +21,16 @@ const App = () => {
       <Routes>
         <Route path={LOGIN_ROUTE} element={<Login admin={false} />} />
         <Route path={ADMIN_LOGIN_ROUTE} element={<Login admin={true} />} />
-        <Route path={HOME_ROUTE} element={<Home />}>
+        <Route
+          path={HOME_ROUTE}
+          element={
+            <UserContextProvider>
+              <TransactionContextProvider>
+                <Home />
+              </TransactionContextProvider>
+            </UserContextProvider>
+          }
+        >
           <Route path={TRANSACTION_ROUTE} element={<Transactions />} />
           <Route path={DASHBOARD_ROUTE} element={<Dashboard />} />
         </Route>

@@ -1,28 +1,35 @@
-import React, { useEffect } from "react";
-import { Outlet, useNavigate } from "react-router-dom";
+import React, { useContext } from "react";
+import { Outlet } from "react-router-dom";
 
 import Sidebar from "../components/Sidebar";
 import Header from "../components/Header";
-import { TransactionContextProvider } from "../context/transactionContext";
-import { DASHBOARD_ROUTE } from "../contants";
-import { UserContextProvider } from "../context/userContext";
+import { TransactionContext } from "../context/transactionContext";
+import AddTransactionModal from "../components/AddTransactionModal";
 
 const Home = () => {
-  //Remove unused variables
-  const navigate = useNavigate();
+  const { showAddTransactionModal, setShowAddTransactionModal } =
+    useContext(TransactionContext);
+
+  const renderAddTransactionModal = () => {
+    if (showAddTransactionModal) {
+      return (
+        <AddTransactionModal
+          onClose={() => setShowAddTransactionModal(false)}
+        />
+      );
+    }
+    return <></>;
+  };
 
   return (
-    <UserContextProvider>
-      <TransactionContextProvider>
-        <div className="relative">
-          <Sidebar />
-          <div className="ml-[200px]">
-            <Header />
-            <Outlet />
-          </div>
-        </div>
-      </TransactionContextProvider>
-    </UserContextProvider>
+    <div className="relative">
+      <Sidebar />
+      <div className="ml-[200px]">
+        <Header />
+        <Outlet />
+      </div>
+      {renderAddTransactionModal()}
+    </div>
   );
 };
 

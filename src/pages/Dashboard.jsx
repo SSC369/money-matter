@@ -10,9 +10,10 @@ import Loader from "../components/Loader";
 import EmptyView from "../components/EmptyView";
 import ChartComponent from "./Chart";
 import { UserContext } from "../context/userContext";
-import { API_DELETE_TRANSACTION, TRANSACTION_HEADERS } from "../contants";
+import { API_DELETE_TRANSACTION, SUCCESS_OK } from "../constants";
 import ErrorPage from "../components/ErrorPage";
 import TotalDebitCredit from "./TotalDebitCredit";
+import { TRANSACTION_HEADERS } from "../utils/headerUtils";
 
 const Dashboard = () => {
   const {
@@ -24,22 +25,21 @@ const Dashboard = () => {
     setDeleteTransactionId,
     showEditTransactionModal,
     setShowEditTransactionModal,
-
     transactionsError,
+    transactions,
   } = useContext(TransactionContext);
-  const [editTransactionData, setEditTransactionData] = useState({
-    name: "",
-    type: "",
-    category: "",
-    amount: 0,
-    date: "",
-    id: "",
-  });
+  const [editTransactionId, setEditTransactionId] = useState(null);
 
   const [isDeleteLoading, setIsDeleteLoading] = useState(false);
 
   const [showAlertModal, setShowAlertModal] = useState(false);
   const { userId } = useContext(UserContext);
+
+  const handleTransactionDeleteSuccess = () => {
+    toast.success("Transaction deleted");
+    transactionsMutate();
+    totalDebitCreditTransactionsMutate();
+  };
 
   const handleTransactionDelete = async () => {
     try {
@@ -50,46 +50,46 @@ const Dashboard = () => {
         headers: TRANSACTION_HEADERS(userId),
       });
 
-      if (res.status === 200) {
-        toast.success("Transaction deleted");
-        transactionsMutate();
-        totalDebitCreditTransactionsMutate();
+      if (res.status === SUCCESS_OK) {
+        handleTransactionDeleteSuccess();
       } else {
       }
     } catch (error) {
       toast.error(error.message);
     } finally {
-      setDeleteTransactionId("");
+      setDeleteTransactionId(null);
       setIsDeleteLoading(false);
       setTimeout(() => {
-        setAlertModal(false);
+        setShowAlertModal(false);
       }, 1000);
     }
   };
 
-  //Move this to function
-  let transactionsData = [];
-  latestTransactions?.forEach(
-    ({ transaction_name, id, category, amount, date, type }) => {
-      transactionsData.push(
-        <TransactionItem
-          key={id}
-          data={{
-            transaction_name,
-            id,
-            category,
-            amount,
-            date,
-            type,
-          }}
-          setEditTransactionData={setEditTransactionData}
-          setShowEditTransactionModal={setShowEditTransactionModal}
-          setShowAlertModal={setShowAlertModal}
-          setDeleteTransactionId={setDeleteTransactionId}
-        />
-      );
-    }
-  );
+  const getTransactionsData = () => {
+    const transactionsData = latestTransactions?.map(
+      ({ transaction_name, id, category, amount, date, type }) => {
+        return (
+          <TransactionItem
+            key={id}
+            data={{
+              transaction_name,
+              id,
+              category,
+              amount,
+              date,
+              type,
+            }}
+            setEditTransactionId={setEditTransactionId}
+            setShowEditTransactionModal={setShowEditTransactionModal}
+            setShowAlertModal={setShowAlertModal}
+            setDeleteTransactionId={setDeleteTransactionId}
+          />
+        );
+      }
+    );
+
+    return transactionsData;
+  };
 
   const renderAlertModal = () => {
     if (showAlertModal) {
@@ -103,24 +103,29 @@ const Dashboard = () => {
         />
       );
     }
+    return <></>;
+  };
+
+  const getEditTransaction = () => {
+    let transactionData;
+    if (editTransactionId) {
+      transactionData = transactions.find(
+        (transaction) => transaction.id === editTransactionId
+      );
+    }
+    return transactionData;
   };
 
   const renderEditTransactionModal = () => {
     if (showEditTransactionModal) {
+      const data = getEditTransaction();
       return (
         <EditTransactionModal
           onClose={() => {
             setShowEditTransactionModal(false);
-            setEditTransactionData({
-              name: "",
-              type: "",
-              category: "",
-              amount: 0,
-              date: "",
-              id: "",
-            });
+            setEditTransactionId(null);
           }}
-          data={editTransactionData}
+          data={data}
         />
       );
     }
@@ -151,7 +156,7 @@ const Dashboard = () => {
             <EmptyView />
           ) : (
             <ul className="bg-white rounded-xl p-2 px-4 flex flex-col gap-2 mt-2">
-              {transactionsData.map((t) => t)}
+              {getTransactionsData().map((t) => t)}
             </ul>
           )}
         </>

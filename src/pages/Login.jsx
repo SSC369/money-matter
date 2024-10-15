@@ -12,7 +12,7 @@ import {
   DASHBOARD_ROUTE,
   LOCALSTORAGE_KEY,
   LOGIN_HEADERS,
-} from "../contants";
+} from "../constants";
 
 const Login = ({ admin }) => {
   const [showPassword, setShowPassword] = useState(false);
@@ -183,7 +183,7 @@ const Login = ({ admin }) => {
           />
           {renderPasswordIcon()}
         </div>
-{/* //Button can be moved into the common component */}
+        {/* //Button can be moved into the common component */}
         <button
           type="submit"
           className="flex justify-center items-center mt-5 mb-2 bg-blue-500 text-white font-medium text-sm rounded-lg h-12 w-full "

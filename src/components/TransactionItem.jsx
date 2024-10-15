@@ -6,61 +6,54 @@ import {
 } from "react-icons/io5";
 import { MdDeleteOutline, MdOutlineModeEdit } from "react-icons/md";
 
-import { DATE_FORMAT, TRANSACTION_TYPES_OBJECT } from "../contants";
+import { DATE_FORMAT, TRANSACTION_TYPES_OBJECT } from "../constants";
 
 const TransactionItem = ({
   data,
-  setEditTransactionData,
+  setEditTransactionId,
   setShowEditTransactionModal,
   setShowAlertModal,
   setDeleteTransactionId,
 }) => {
   const { transaction_name, id, category, amount, date, type } = data;
 
+  const handleEditClick = () => {
+    setEditTransactionId(id);
+    setShowEditTransactionModal(true);
+  };
+
+  const handleDeleteClick = () => {
+    setShowAlertModal(true);
+    setDeleteTransactionId(id);
+  };
+
   const renderButtons = () => {
     return (
       <>
-        <button
-          onClick={() => {
-            setEditTransactionData({
-              category,
-              amount,
-              date,
-              name: transaction_name,
-              type,
-              id,
-            });
-            setShowEditTransactionModal(true);
-          }}
-        >
+        <button onClick={handleEditClick}>
           <MdOutlineModeEdit className="text-xl text-blue-400" />
         </button>
-        <button
-          onClick={() => {
-            setShowAlertModal(true);
-            setDeleteTransactionId(id);
-          }}
-        >
+        <button onClick={handleDeleteClick}>
           <MdDeleteOutline className="text-xl text-red-400" />
         </button>
       </>
     );
   };
 
+  const isCredit = type === TRANSACTION_TYPES_OBJECT.credit;
+
   const renderTransactionAmount = () => {
-    if (type === TRANSACTION_TYPES_OBJECT.credit) {
+    if (isCredit) {
       return <span className="text-green-500">+${amount}</span>;
-    } else {
-      return <span className="text-red-500">-${amount}</span>;
     }
+    return <span className="text-red-500">-${amount}</span>;
   };
 
   const renderTransactionIcon = () => {
-    if (type === TRANSACTION_TYPES_OBJECT.credit) {
+    if (isCredit) {
       return <IoArrowUpCircleOutline className="text-xl text-green-500" />;
-    } else {
-      return <IoArrowDownCircleOutline className="text-xl text-red-500" />;
     }
+    return <IoArrowDownCircleOutline className="text-xl text-red-500" />;
   };
 
   return (

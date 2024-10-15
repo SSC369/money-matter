@@ -12,24 +12,28 @@ import {
   ACTION_TYPES,
   API_UPDATE_TRANSACTION,
   CATEGORY_OPTIONS,
-  TRANSACTION_HEADERS,
+  INPUT_DATE_FORMAT,
+  SUCCESS_OK,
   TRANSACTION_TYPES,
-} from "../contants";
+} from "../constants";
 import InputContainer, {
   InputElement,
   InputLabel,
   SelectInput,
 } from "./InputComponents";
+import { TRANSACTION_HEADERS } from "../utils/headerUtils";
 
 const EditTransactionModal = ({ onClose, data }) => {
   const [isVisible, setIsVisible] = useState(false);
+  const { transaction_name, type, category, amount, date, id } = data;
+
   const [formData, setFormData] = useState({
-    name: "",
-    type: "",
-    category: "",
-    amount: 0,
-    date: "",
-    id: "",
+    name: transaction_name,
+    type,
+    category,
+    amount,
+    id,
+    date: dayjs(new Date(date)).format(INPUT_DATE_FORMAT),
   });
   const [isEditLoading, setIsEditLoading] = useState(false);
   const { transactionsMutate, totalDebitCreditTransactionsMutate } =
@@ -38,12 +42,6 @@ const EditTransactionModal = ({ onClose, data }) => {
 
   useEffect(() => {
     setIsVisible(true); // Trigger the animation when modal is mounted
-    //Remove this implementation
-    //Move the date format to constants
-    setFormData({
-      ...data,
-      date: dayjs(new Date(data.date)).format("YYYY-MM-DDThh:mm"),
-    });
   }, []);
 
   const handleChange = (e) => {
@@ -65,11 +63,25 @@ const EditTransactionModal = ({ onClose, data }) => {
     } else if (!type) {
       toast.error("Please enter type");
       return false;
-    } else if (!amount) {
+    } else if (parseInt(amount) === 0) {
       toast.error("Please enter amount");
       return false;
     }
     return true;
+  };
+
+  const handleEditSuccess = () => {
+    toast.success("Transaction Updated");
+    transactionsMutate();
+    totalDebitCreditTransactionsMutate();
+    setFormData({
+      name: "",
+      type: "",
+      category: "",
+      amount: 0,
+      date: "",
+    });
+    onClose();
   };
 
   const handleEditTransaction = async (e) => {
@@ -94,18 +106,8 @@ const EditTransactionModal = ({ onClose, data }) => {
           }
         );
 
-        if (res.status === 200) {
-          toast.success("Transaction Updated");
-          transactionsMutate();
-          totalDebitCreditTransactionsMutate();
-          setFormData({
-            name: "",
-            type: "",
-            category: "",
-            amount: 0,
-            date: "",
-          });
-          onClose();
+        if (res.status === SUCCESS_OK) {
+          handleEditSuccess();
         } else {
           toast.error("Response is " + res.status);
         }

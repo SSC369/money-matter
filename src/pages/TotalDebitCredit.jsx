@@ -3,7 +3,7 @@ import { TransactionContext } from "../context/transactionContext";
 import creditImage from "../assets/credit.png";
 import debitImage from "../assets/debit.png";
 import Loader from "../components/Loader";
-import { TRANSACTION_TYPES_OBJECT } from "../contants";
+import { TRANSACTION_TYPES_OBJECT } from "../constants";
 
 const TotalDebitCredit = () => {
   const {
@@ -16,8 +16,8 @@ const TotalDebitCredit = () => {
     return <h1>Something went wrong !!!</h1>;
   }
 
-  const renderImage = (type) => {
-    if (type === TRANSACTION_TYPES_OBJECT.credit) {
+  const renderImage = (isTypeCredit) => {
+    if (isTypeCredit) {
       return (
         <img
           className="h-24"
@@ -25,15 +25,14 @@ const TotalDebitCredit = () => {
           alt={TRANSACTION_TYPES_OBJECT.credit}
         />
       );
-    } else {
-      return (
-        <img
-          className="h-24"
-          src={debitImage}
-          alt={TRANSACTION_TYPES_OBJECT.debit}
-        />
-      );
     }
+    return (
+      <img
+        className="h-24"
+        src={debitImage}
+        alt={TRANSACTION_TYPES_OBJECT.debit}
+      />
+    );
   };
 
   return (
@@ -46,6 +45,8 @@ const TotalDebitCredit = () => {
         <div className="flex items-center gap-4 justify-around mx-auto">
           {totalDebitCreditTransactionsData?.map((total, index) => {
             const { type, sum } = total;
+
+            const isTypeCredit = type === TRANSACTION_TYPES_OBJECT.credit;
             return (
               <div
                 key={index}
@@ -55,7 +56,7 @@ const TotalDebitCredit = () => {
                   <p
                     className="text-3xl font-semibold"
                     style={
-                      type === TRANSACTION_TYPES_OBJECT.credit
+                      isTypeCredit
                         ? { color: "rgba(22, 219, 170, 1)" }
                         : { color: "rgba(254, 92, 115, 1)" }
                     }
@@ -70,7 +71,7 @@ const TotalDebitCredit = () => {
                   </p>
                 </div>
 
-                {renderImage(type)}
+                {renderImage(isTypeCredit)}
               </div>
             );
           })}

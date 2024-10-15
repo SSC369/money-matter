@@ -18,14 +18,6 @@ export const API_ADD_TRANSACTION = BASE_URL + "/add-transaction";
 export const API_DELETE_TRANSACTION = BASE_URL + "/delete-transaction?id=";
 export const API_UPDATE_TRANSACTION = BASE_URL + "/update-transaction";
 
-export const TRANSACTION_HEADERS = (userId) => {
-  return {
-    "x-hasura-admin-secret": X_HASURA_ADMIN_SECRET,
-    "x-hasura-role": X_HASURA_ROLE,
-    "x-hasura-user-id": userId,
-  };
-};
-
 export const SIDEBAR_OPTIONS = {
   dashboard: "dashboard",
   transactions: "transactions",
@@ -70,3 +62,8 @@ export const ACTION_TYPES = {
 };
 
 export const DATE_FORMAT = "DD MMM YY, hh:mm A";
+export const INPUT_DATE_FORMAT = "YYYY-MM-DDThh:mm";
+export const SUCCESS_OK = 200;
+export const SUCCESS_CREATED = 201;
+export const TRANSACTIONS_LIMIT = 100;
+export const TRANSACTIONS_OFFSET = 0;

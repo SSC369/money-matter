@@ -9,8 +9,11 @@ import {
   API_TOTAL_DEBIT_CREDIT_TRANSACTIONS,
   INITIAL_ACTIVE_TAB,
   NUMBER_OF_TRANSACTIONS,
-  TRANSACTION_HEADERS,
-} from "../contants";
+  SUCCESS_OK,
+  TRANSACTIONS_LIMIT,
+  TRANSACTIONS_OFFSET,
+} from "../constants";
+import { TRANSACTION_HEADERS } from "../utils/headerUtils";
 
 export const TransactionContext = createContext();
 
@@ -29,6 +32,7 @@ export const TransactionContextProvider = ({ children }) => {
   const { userId } = getUserDetails();
   const [showEditTransactionModal, setShowEditTransactionModal] =
     useState(false);
+  const [showAddTransactionModal, setShowAddTransactionModal] = useState(false);
   const [deleteTransactionId, setDeleteTransactionId] = useState(null);
 
   //No magic numbers
@@ -38,15 +42,12 @@ export const TransactionContextProvider = ({ children }) => {
         method: "get",
         baseURL: url,
         params: {
-          limit: 100,
-          offset: 0,
+          limit: TRANSACTIONS_LIMIT,
+          offset: TRANSACTIONS_OFFSET,
         },
-        headers: {
-          "Content-Type": "application/json",
-          ...TRANSACTION_HEADERS(userId), //move this to utils and add the proper naming format
-        },
+        headers: TRANSACTION_HEADERS(userId), //move this to utils and add the proper naming format
       });
-      if (res.status === 200) {
+      if (res.status === SUCCESS_OK) {
         const { data } = res;
         const { transactions } = data;
         return transactions;
@@ -70,11 +71,10 @@ export const TransactionContextProvider = ({ children }) => {
     try {
       const res = await axios.get(url, {
         headers: {
-          "Content-Type": "application/json",
           ...TRANSACTION_HEADERS(userId),
         },
       });
-      if (res.status === 200) {
+      if (res.status === SUCCESS_OK) {
         const { data } = res;
         const { totals_credit_debit_transactions } = data;
         return totals_credit_debit_transactions;
@@ -96,20 +96,23 @@ export const TransactionContextProvider = ({ children }) => {
     totalDebitCreditTransactionsFetcher
   );
 
-  let latestTransactions = [];
+  const getLatestTransactions = () => {
+    let latestTransactions = [];
+    if (!isTransactionsLoading) {
+      latestTransactions = transactions
+        ?.sort((first, second) => new Date(second.date) - new Date(first.date))
+        .slice(0, NUMBER_OF_TRANSACTIONS);
+    }
 
-  if (!isTransactionsLoading) {
-    latestTransactions = transactions
-      ?.sort((first, second) => new Date(second.date) - new Date(first.date))
-      .slice(0, NUMBER_OF_TRANSACTIONS);
-  }
+    return latestTransactions;
+  };
 
   return (
     <TransactionContext.Provider
       value={{
         activeTab,
         setActiveTab,
-        latestTransactions,
+        latestTransactions: getLatestTransactions(),
         isTransactionsLoading,
         transactions,
         transactionsMutate,
@@ -122,6 +125,8 @@ export const TransactionContextProvider = ({ children }) => {
         setDeleteTransactionId,
         transactionsError,
         totalDebitCreditTransactionsError,
+        showAddTransactionModal,
+        setShowAddTransactionModal,
       }}
     >
       {children}

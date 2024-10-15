@@ -1,6 +1,6 @@
 import React from "react";
 import { TailSpin } from "react-loader-spinner";
-import { ACTION_TYPES } from "../contants";
+import { ACTION_TYPES } from "../constants";
 
 const LoadingButton = ({ action, isLoading }) => {
   const renderButtonText = () => {
@@ -28,9 +28,8 @@ const LoadingButton = ({ action, isLoading }) => {
           wrapperClass=""
         />
       );
-    } else {
-      return renderButtonText();
     }
+    return renderButtonText();
   };
 
   return (

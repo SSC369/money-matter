@@ -1,14 +1,14 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { IoIosAdd } from "react-icons/io";
 
 import AddTransactionModal from "./AddTransactionModal";
 import TransactionOption from "./TransactionOption";
-import { DASHBOARD_ROUTE, TAB_OPTIONS, TRANSACTION_ROUTE } from "../contants";
+import { DASHBOARD_ROUTE, TAB_OPTIONS, TRANSACTION_ROUTE } from "../constants";
+import { TransactionContext } from "../context/transactionContext";
 
 const Header = () => {
   const path = window.location.pathname;
-  //Lift this state and modal residtration to higher level components
-  const [showAddTransactionModal, setShowAddTransactionModal] = useState(false);
+  const { setShowAddTransactionModal } = useContext(TransactionContext);
 
   const renderHeaderName = () => {
     switch (path) {
@@ -37,23 +37,17 @@ const Header = () => {
         </ul>
       );
     }
-    
+    return <></>;
   };
 
-  const renderAddTransactionModal = () => {
-    if (showAddTransactionModal) {
-      return (
-        <AddTransactionModal
-          onClose={() => setShowAddTransactionModal(false)}
-        />
-      );
-    }
+  const handleShowAddTransactionModal = () => {
+    setShowAddTransactionModal(true);
   };
 
   const renderAddTransactionButton = () => {
     return (
       <button
-        onClick={() => setShowAddTransactionModal(true)}
+        onClick={handleShowAddTransactionModal}
         className="bg-blue-600 text-white rounded-lg flex items-center p-1 pr-2"
       >
         <IoIosAdd className="text-2xl" />{" "}
@@ -70,7 +64,6 @@ const Header = () => {
       </div>
 
       {renderTabs()}
-      {renderAddTransactionModal()}
     </header>
   );
 };

@@ -11,14 +11,15 @@ import {
   ACTION_TYPES,
   API_ADD_TRANSACTION,
   CATEGORY_OPTIONS,
-  TRANSACTION_HEADERS,
+  SUCCESS_OK,
   TRANSACTION_TYPES,
-} from "../contants";
+} from "../constants";
 import InputContainer, {
   InputElement,
   InputLabel,
   SelectInput,
 } from "./InputComponents";
+import { TRANSACTION_HEADERS } from "../utils/headerUtils";
 
 const AddTransactionModal = ({ onClose }) => {
   const [isVisible, setIsVisible] = useState(false);
@@ -34,13 +35,13 @@ const AddTransactionModal = ({ onClose }) => {
     useContext(TransactionContext);
   const { userId } = useContext(UserContext);
 
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
-
   useEffect(() => {
     setIsVisible(true); // Trigger the animation when modal is mounted
   }, []);
+
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
 
   const transactionValidation = () => {
     const { name, category, date, type, amount } = formData;
@@ -66,6 +67,20 @@ const AddTransactionModal = ({ onClose }) => {
     return true;
   };
 
+  const handleSuccess = () => {
+    toast.success("Transaction Added");
+    transactionsMutate();
+    totalDebitCreditTransactionsMutate();
+    setFormData({
+      name: "",
+      type: "",
+      category: "",
+      amount: 0,
+      date: "",
+    });
+    onClose();
+  };
+
   const handleAddTransaction = async (e) => {
     try {
       setAddLoading(true);
@@ -89,18 +104,8 @@ const AddTransactionModal = ({ onClose }) => {
           }
         );
 
-        if (res.status === 200) {
-          toast.success("Transaction Added");
-          transactionsMutate();
-          totalDebitCreditTransactionsMutate();
-          setFormData({
-            name: "",
-            type: "",
-            category: "",
-            amount: 0,
-            date: "",
-          });
-          onClose();
+        if (res.status === SUCCESS_OK) {
+          handleSuccess();
         }
       }
     } catch (error) {

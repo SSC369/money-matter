@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { IoClose, IoWarningOutline } from "react-icons/io5";
 import { TailSpin } from "react-loader-spinner";
-import { ACTION_TYPES } from "../contants";
+import { ACTION_TYPES } from "../constants";
 
-const ConfirmModal = ({ toggleModal, isLoading, action, actionHandler }) => {
+const ConfirmModal = ({ onClose, isLoading, action, actionHandler }) => {
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
@@ -49,7 +49,7 @@ const ConfirmModal = ({ toggleModal, isLoading, action, actionHandler }) => {
   const handleCloseModal = () => {
     setIsVisible(false);
     setTimeout(() => {
-      toggleModal(); // Close the modal after the animation
+      onClose(); // Close the modal after the animation
     }, 300); // Match the animation duration
   };
 

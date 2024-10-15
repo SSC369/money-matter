@@ -14,16 +14,24 @@ import {
   LOCALSTORAGE_KEY,
   LOGIN_ROUTE,
   SIDEBAR_OPTIONS,
-  TRANSACTION_HEADERS,
-} from "../contants";
+  SUCCESS_OK,
+} from "../constants";
+import { removeDataFromLocalStorage } from "../utils/localStorageUtils";
+import { TRANSACTION_HEADERS } from "../utils/headerUtils";
 
 const Sidebar = () => {
   //Boolean naming format
-  const [alertModal, setAlertModal] = useState(false);
+  const [showAlertModal, setShowAlertModal] = useState(false);
   const [userData, setUserData] = useState(null);
-  const [logoutLoading, setLogoutLoading] = useState(false);
+  const [isLogoutLoading, setIsLogoutLoading] = useState(false);
   const { userId } = useContext(UserContext);
   const navigate = useNavigate();
+
+  function handleProfileFetchSuccess(res) {
+    const { data } = res;
+    const userDetails = data.users[0];
+    setUserData(userDetails);
+  }
 
   const fetchUserProfile = async () => {
     try {
@@ -32,9 +40,8 @@ const Sidebar = () => {
         headers: TRANSACTION_HEADERS(userId),
       });
 
-      if (res.status === 200) {
-        const userDetails = res.data.users[0]
-        setUserData(userDetails]);
+      if (res.status === SUCCESS_OK) {
+        handleProfileFetchSuccess(res);
       }
     } catch (error) {
       toast.error(error.message);
@@ -42,12 +49,12 @@ const Sidebar = () => {
   };
   useEffect(() => {
     fetchUserProfile();
-  }, [userId]);
+  }, []);
 
   const handleLogout = () => {
     try {
-      setLogoutLoading(true);
-      localStorage.removeItem(LOCALSTORAGE_KEY);
+      setIsLogoutLoading(true);
+      removeDataFromLocalStorage(LOCALSTORAGE_KEY);
       toast.success("Logout successful", { duration: 1000 });
       navigate(LOGIN_ROUTE);
     } catch (error) {
@@ -80,6 +87,10 @@ const Sidebar = () => {
     );
   };
 
+  const handleShowAlertModal = () => {
+    setShowAlertModal(true);
+  };
+
   const renderProfile = () => {
     return (
       <div className="flex gap-2 items-start px-2 mt-auto">
@@ -97,29 +108,26 @@ const Sidebar = () => {
           </p>
         </div>
 
-{/* //Give this "setAlertModal" call back to button onclick */}
-        <button>
-          <LuLogOut
-            onClick={() => setAlertModal(true)}
-            color="rgba(113, 142, 191, 1)"
-            className="text-lg "
-          />
+        {/* //Give this "setAlertModal" call back to button onclick */}
+        <button onClick={handleShowAlertModal}>
+          <LuLogOut color="rgba(113, 142, 191, 1)" className="text-lg " />
         </button>
       </div>
     );
   };
 
   const renderConfirmModal = () => {
-    if (alertModal) {
-      //Rename toggleModal prop to close model
+    if (showAlertModal) {
       return (
         <ConfirmModal
-          toggleModal={() => setAlertModal(false)}
-          isLoading={logoutLoading}
+          onClose={() => setShowAlertModal(false)}
+          isLoading={isLogoutLoading}
           action={ACTION_TYPES.logout}
           actionHandler={handleLogout}
         />
       );
+    } else {
+      <></>;
     }
   };
 

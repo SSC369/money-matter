@@ -11,11 +11,12 @@ import EmptyView from "../components/EmptyView";
 import {
   ACTION_TYPES,
   API_DELETE_TRANSACTION,
+  SUCCESS_OK,
   TAB_OPTIONS,
-  TRANSACTION_HEADERS,
-} from "../contants";
+} from "../constants";
 import { UserContext } from "../context/userContext";
 import ErrorPage from "../components/ErrorPage";
+import { TRANSACTION_HEADERS } from "../utils/headerUtils";
 
 const Transactions = () => {
   const [showAlertModal, setShowAlertModal] = useState(false);
@@ -34,14 +35,7 @@ const Transactions = () => {
   } = useContext(TransactionContext);
 
   //This state can be removed
-  const [editTransactionData, setEditTransactionData] = useState({
-    name: "",
-    type: "",
-    category: "",
-    amount: 0,
-    date: "",
-    id: "",
-  });
+  const [editTransactionId, setEditTransactionId] = useState(null);
 
   const { userId } = useContext(UserContext);
 
@@ -53,7 +47,7 @@ const Transactions = () => {
         headers: TRANSACTION_HEADERS(userId),
       });
 
-      if (res.status === 200) {
+      if (res.status === SUCCESS_OK) {
         toast.success("Transaction deleted");
         transactionsMutate();
         totalDebitCreditTransactionsMutate();
@@ -62,8 +56,7 @@ const Transactions = () => {
       toast.error(error.message);
     } finally {
       setIsDeleteLoading(false);
-      //set this as null
-      setDeleteTransactionId("");
+      setDeleteTransactionId(null);
       setTimeout(() => {
         setShowAlertModal(false);
       }, 1000);
@@ -88,7 +81,7 @@ const Transactions = () => {
               date,
               type,
             }}
-            setEditTransactionData={setEditTransactionData}
+            setEditTransactionId={setEditTransactionId}
             setShowEditTransactionModal={setShowEditTransactionModal}
             setShowAlertModal={setShowAlertModal}
             setDeleteTransactionId={setDeleteTransactionId}
@@ -98,6 +91,59 @@ const Transactions = () => {
       return null;
     }
   );
+
+  const renderAllTransactionTypes = () => {
+    const data = transactions?.map(
+      ({ transaction_name, id, category, amount, date, type }) => {
+        return (
+          <TransactionItem
+            key={id}
+            data={{
+              transaction_name,
+              id,
+              category,
+              amount,
+              date,
+              type,
+            }}
+            setEditTransactionId={setEditTransactionId}
+            setShowEditTransactionModal={setShowEditTransactionModal}
+            setShowAlertModal={setShowAlertModal}
+            setDeleteTransactionId={setDeleteTransactionId}
+          />
+        );
+      }
+    );
+    return data;
+  };
+
+  const renderCreditTransactions = () => {
+    const data = transactions?.map(
+      ({ transaction_name, id, category, amount, date, type }) => {
+        if (type === "credit") {
+          return (
+            <TransactionItem
+              key={id}
+              data={{
+                transaction_name,
+                id,
+                category,
+                amount,
+                date,
+                type,
+              }}
+              setEditTransactionId={setEditTransactionId}
+              setShowEditTransactionModal={setShowEditTransactionModal}
+              setShowAlertModal={setShowAlertModal}
+              setDeleteTransactionId={setDeleteTransactionId}
+            />
+          );
+        }
+        return <></>;
+      }
+    );
+    return data;
+  };
 
   const RenderTransactions = () => {
     return (
@@ -135,22 +181,26 @@ const Transactions = () => {
     }
   };
 
+  const getTransaction = () => {
+    let transactionData;
+    if (editTransactionId) {
+      transactionData = transactions.filter(
+        (transaction) => transaction.id === editTransactionId
+      );
+    }
+    return transactionData;
+  };
+
   const renderEditTransactionModal = () => {
     if (showEditTransactionModal) {
+      const data = getTransaction();
       return (
         <EditTransactionModal
           onClose={() => {
             setShowEditTransactionModal(false);
-            setEditTransactionData({
-              name: "",
-              type: "",
-              category: "",
-              amount: 0,
-              date: "",
-              id: "",
-            });
+            setEditTransactionId(null);
           }}
-          data={editTransactionData}
+          data={data}
         />
       );
     }
