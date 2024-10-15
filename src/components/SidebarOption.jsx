@@ -15,6 +15,7 @@ const SidebarOption = ({ option }) => {
 
   const transactionTabName = SIDEBAR_OPTIONS.transactions;
 
+  //convert the if conditions to switch case
   const renderOption = () => {
     if (SIDEBAR_OPTIONS.dashboard === option) {
       return (
@@ -24,6 +25,7 @@ const SidebarOption = ({ option }) => {
         </>
       );
     } else if (transactionTabName === option) {
+      //remove the constants to render in the dom directly
       return (
         <>
           <TbReceiptDollar className="text-xl" />
@@ -35,6 +37,7 @@ const SidebarOption = ({ option }) => {
     }
   };
 
+  //Add the confition into a boolean variable (Conditional encapsulation)
   const renderPointer = () => {
     if (path === currentPath) {
       return (

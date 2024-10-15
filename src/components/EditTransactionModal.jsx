@@ -38,6 +38,8 @@ const EditTransactionModal = ({ onClose, data }) => {
 
   useEffect(() => {
     setIsVisible(true); // Trigger the animation when modal is mounted
+    //Remove this implementation
+    //Move the date format to constants
     setFormData({
       ...data,
       date: dayjs(new Date(data.date)).format("YYYY-MM-DDThh:mm"),

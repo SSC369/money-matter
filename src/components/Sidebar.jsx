@@ -18,6 +18,7 @@ import {
 } from "../contants";
 
 const Sidebar = () => {
+  //Boolean naming format
   const [alertModal, setAlertModal] = useState(false);
   const [userData, setUserData] = useState(null);
   const [logoutLoading, setLogoutLoading] = useState(false);
@@ -32,7 +33,8 @@ const Sidebar = () => {
       });
 
       if (res.status === 200) {
-        setUserData(res.data.users[0]);
+        const userDetails = res.data.users[0]
+        setUserData(userDetails]);
       }
     } catch (error) {
       toast.error(error.message);
@@ -95,6 +97,7 @@ const Sidebar = () => {
           </p>
         </div>
 
+{/* //Give this "setAlertModal" call back to button onclick */}
         <button>
           <LuLogOut
             onClick={() => setAlertModal(true)}
@@ -108,6 +111,7 @@ const Sidebar = () => {
 
   const renderConfirmModal = () => {
     if (alertModal) {
+      //Rename toggleModal prop to close model
       return (
         <ConfirmModal
           toggleModal={() => setAlertModal(false)}
@@ -122,11 +126,8 @@ const Sidebar = () => {
   return (
     <div className="min-w-[200px] z-50 fixed flex flex-col bg-white py-4 min-h-dvh border-r-2 border-r-slate-100">
       {renderHeader()}
-
       {renderOptions()}
-
       {renderProfile()}
-
       {renderConfirmModal()}
     </div>
   );

@@ -67,6 +67,7 @@ const Dashboard = () => {
     }
   };
 
+  //Move this to function
   let transactionsData = [];
   latestTransactions?.forEach(
     ({ transaction_name, id, category, amount, date, type }) => {

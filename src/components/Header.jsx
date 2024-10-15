@@ -7,6 +7,7 @@ import { DASHBOARD_ROUTE, TAB_OPTIONS, TRANSACTION_ROUTE } from "../contants";
 
 const Header = () => {
   const path = window.location.pathname;
+  //Lift this state and modal residtration to higher level components
   const [showAddTransactionModal, setShowAddTransactionModal] = useState(false);
 
   const renderHeaderName = () => {
@@ -36,6 +37,7 @@ const Header = () => {
         </ul>
       );
     }
+    
   };
 
   const renderAddTransactionModal = () => {

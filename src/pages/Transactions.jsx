@@ -33,6 +33,7 @@ const Transactions = () => {
     transactionsError,
   } = useContext(TransactionContext);
 
+  //This state can be removed
   const [editTransactionData, setEditTransactionData] = useState({
     name: "",
     type: "",
@@ -61,6 +62,7 @@ const Transactions = () => {
       toast.error(error.message);
     } finally {
       setIsDeleteLoading(false);
+      //set this as null
       setDeleteTransactionId("");
       setTimeout(() => {
         setShowAlertModal(false);
@@ -68,9 +70,12 @@ const Transactions = () => {
     }
   };
 
+  //Move this transations to seperate function
+  //Change this function to more readable
   let transactionsData = [];
   transactions?.forEach(
     ({ transaction_name, id, category, amount, date, type }) => {
+      //Do conditional encapsulation
       if (activeTab === TAB_OPTIONS.transactions || activeTab === type) {
         transactionsData.push(
           <TransactionItem

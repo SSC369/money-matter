@@ -8,6 +8,7 @@ import { DASHBOARD_ROUTE } from "../contants";
 import { UserContextProvider } from "../context/userContext";
 
 const Home = () => {
+  //Remove unused variables
   const navigate = useNavigate();
 
   return (

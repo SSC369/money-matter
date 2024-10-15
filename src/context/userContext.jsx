@@ -23,9 +23,10 @@ export const UserContextProvider = ({ children }) => {
     }
   }, [userId]);
 
+  //Remove unused code (setUserId)
   if (userId) {
     return (
-      <UserContext.Provider value={{ userId, setUserId, isAdmin }}>
+      <UserContext.Provider value={{ userId, setUserId, isAdmin: userData }}>
         {children}
       </UserContext.Provider>
     );

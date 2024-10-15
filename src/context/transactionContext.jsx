@@ -14,6 +14,7 @@ import {
 
 export const TransactionContext = createContext();
 
+//This function is not required as we are already doing null check in the above component
 const getUserDetails = () => {
   const { userId } = useContext(UserContext);
   if (!userId) {
@@ -30,6 +31,7 @@ export const TransactionContextProvider = ({ children }) => {
     useState(false);
   const [deleteTransactionId, setDeleteTransactionId] = useState(null);
 
+  //No magic numbers
   const transactionsFetcher = async (url) => {
     try {
       const res = await axios({
@@ -41,7 +43,7 @@ export const TransactionContextProvider = ({ children }) => {
         },
         headers: {
           "Content-Type": "application/json",
-          ...TRANSACTION_HEADERS(userId),
+          ...TRANSACTION_HEADERS(userId), //move this to utils and add the proper naming format
         },
       });
       if (res.status === 200) {

@@ -39,6 +39,7 @@ const Login = ({ admin }) => {
     const trimEmail = email.trim();
     const trimPassword = password.trim();
     if (trimEmail === "") {
+      //Add toast utils and use the showSuccessToast and showFailureToast
       toast.error("Please enter email !", { duration: 1000 });
       return false;
     } else if (trimPassword === "") {
@@ -69,6 +70,7 @@ const Login = ({ admin }) => {
 
         const { data } = response;
 
+        //Move the success handling to a function
         if (response.status === 200) {
           setFormData({
             password: "",
@@ -108,6 +110,7 @@ const Login = ({ admin }) => {
         />
       );
     } else {
+      //can return the component directly without the else statement
       return (
         <AiOutlineEye
           onClick={() => setShowPassword(!showPassword)}
@@ -118,6 +121,7 @@ const Login = ({ admin }) => {
     }
   };
 
+  //Devide them into the render functions
   return (
     <div className="flex flex-col items-center justify-center bg-white min-w-[300px] min-h-dvh">
       <form
@@ -179,7 +183,7 @@ const Login = ({ admin }) => {
           />
           {renderPasswordIcon()}
         </div>
-
+{/* //Button can be moved into the common component */}
         <button
           type="submit"
           className="flex justify-center items-center mt-5 mb-2 bg-blue-500 text-white font-medium text-sm rounded-lg h-12 w-full "
