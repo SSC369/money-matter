@@ -19,6 +19,7 @@ import {
 } from "../constants";
 import { removeDataFromLocalStorage } from "../utils/localStorageUtils";
 import { TRANSACTION_HEADERS } from "../utils/headerUtils";
+import { sidebarContainer } from "../styles";
 
 const Sidebar = () => {
   const [showAlertModal, setShowAlertModal] = useState(false);
@@ -129,14 +130,15 @@ const Sidebar = () => {
     setShowMenu(false);
   };
 
+  let isMenuClosable = showMenu || window.innerWidth >= 768;
   return (
     <div
       style={
-        showMenu
+        isMenuClosable
           ? { display: "flex", justifyContent: "space-between" }
           : { display: "none" }
       }
-      className="min-w-[200px] md:flex z-50 fixed shadow-lg shadow-slate-300 md:shadow-none flex-col bg-white md:py-4 py-2 min-h-dvh md:border-r-2 md:border-r-slate-100 dark:border-r-slate-600 dark:shadow-slate-500 pb-4 dark:bg-slate-800"
+      className={sidebarContainer}
     >
       {renderHeader()}
 

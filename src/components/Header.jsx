@@ -2,7 +2,6 @@ import React, { useContext, useState } from "react";
 import { IoIosAdd } from "react-icons/io";
 import { IoMenu } from "react-icons/io5";
 
-import AddTransactionModal from "./AddTransactionModal";
 import TransactionOption from "./TransactionOption";
 import { DASHBOARD_ROUTE, TAB_OPTIONS, TRANSACTION_ROUTE } from "../constants";
 import { TransactionContext } from "../context/transactionContext";

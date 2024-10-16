@@ -53,6 +53,9 @@ const SidebarOption = ({ option }) => {
 
   const handleClickSidebarOption = () => {
     navigate(currentPath);
+    if (window.innerWidth < 768) {
+      setShowMenu(false);
+    }
   };
 
   return (
