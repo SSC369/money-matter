@@ -23,7 +23,7 @@ const TransactionOption = ({ option }) => {
   return (
     <li
       style={isActiveTab ? { color: "rgba(45, 96, 255, 1)" } : {}}
-      className="w-fit relative cursor-pointer"
+      className="w-fit relative dark:text-slate-200 cursor-pointer"
       onClick={() => {
         setActiveTab(option);
       }}

@@ -120,48 +120,9 @@ const Login = ({ admin }) => {
     }
   };
 
-  //Devide them into the render functions
-  return (
-    <div className="flex flex-col items-center justify-center bg-white min-w-[300px] min-h-dvh">
-      <form
-        onSubmit={handleSubmit}
-        className="shadow-2xl flex flex-col gap-3 bg-white p-8 w-4/5 max-w-md min-w-[300px] rounded-2xl text-sm"
-      >
-        <h1
-          style={{ color: "rgba(248, 154, 35, 1)" }}
-          className="font-bold text-xl text-center"
-        >
-          Money{" "}
-          <span className="" style={{ color: "rgba(2, 150, 156, 1)" }}>
-            Matters
-          </span>
-        </h1>
-        <h1
-          style={{ color: "rgba(80, 88, 135, 1)" }}
-          className=" font-medium text-xl mb-3 text-center"
-        >
-          {admin && "Admin "}Login
-        </h1>
-        <label
-          style={{ color: "rgba(80, 88, 135, 1)" }}
-          className=" font-medium"
-        >
-          Email
-        </label>
-
-        <div className="flex items-center border-2 border-gray-300 rounded-lg h-12 pl-2 transition focus-within:border-blue-500">
-          <IoMdMail className="mr-2" size={20} />
-          <input
-            required
-            onChange={handleChange}
-            name="email"
-            value={formData.email}
-            type="email"
-            className="ml-2 border-none h-full focus:outline-none w-[80%]"
-            placeholder="Enter your Email"
-          />
-        </div>
-
+  const renderPasswordInput = () => {
+    return (
+      <>
         <label
           style={{ color: "rgba(80, 88, 135, 1)" }}
           className=" font-medium"
@@ -182,27 +143,103 @@ const Login = ({ admin }) => {
           />
           {renderPasswordIcon()}
         </div>
-        {/* //Button can be moved into the common component */}
-        <button
-          type="submit"
-          className="flex justify-center items-center mt-5 mb-2 bg-blue-500 text-white font-medium text-sm rounded-lg h-12 w-full "
+      </>
+    );
+  };
+
+  const renderSubmitButton = () => {
+    return (
+      <button
+        type="submit"
+        className="flex justify-center items-center mt-5 mb-2 bg-blue-500 text-white font-medium text-sm rounded-lg h-12 w-full "
+      >
+        {loading ? (
+          <TailSpin
+            visible={true}
+            height="30"
+            width="30"
+            color="white"
+            ariaLabel="tail-spin-loading"
+            radius="1"
+            wrapperStyle={{}}
+            wrapperClass=""
+          />
+        ) : (
+          "Submit"
+        )}
+      </button>
+    );
+  };
+
+  const renderEmailInput = () => {
+    return (
+      <>
+        <label
+          style={{ color: "rgba(80, 88, 135, 1)" }}
+          className=" font-medium"
         >
-          {loading ? (
-            <TailSpin
-              visible={true}
-              height="30"
-              width="30"
-              color="white"
-              ariaLabel="tail-spin-loading"
-              radius="1"
-              wrapperStyle={{}}
-              wrapperClass=""
-            />
-          ) : (
-            "Submit"
-          )}
-        </button>
+          Email
+        </label>
+
+        <div className="flex items-center border-2 border-gray-300 rounded-lg h-12 pl-2 transition focus-within:border-blue-500">
+          <IoMdMail className="mr-2" size={20} />
+          <input
+            required
+            onChange={handleChange}
+            name="email"
+            value={formData.email}
+            type="email"
+            className="ml-2 border-none h-full focus:outline-none w-[80%]"
+            placeholder="Enter your Email"
+          />
+        </div>
+      </>
+    );
+  };
+
+  const renderLogo = () => {
+    return (
+      <h1
+        style={{ color: "rgba(248, 154, 35, 1)" }}
+        className="font-bold text-xl text-center"
+      >
+        Money{" "}
+        <span className="" style={{ color: "rgba(2, 150, 156, 1)" }}>
+          Matters
+        </span>
+      </h1>
+    );
+  };
+
+  const renderLoginHeader = () => {
+    return (
+      <h1
+        style={{ color: "rgba(80, 88, 135, 1)" }}
+        className=" font-medium text-xl mb-3 text-center"
+      >
+        {admin && "Admin "}Login
+      </h1>
+    );
+  };
+
+  const renderLoginForm = () => {
+    return (
+      <form
+        onSubmit={handleSubmit}
+        className="shadow-2xl flex flex-col gap-3 bg-white p-8 w-4/5 max-w-md min-w-[300px] rounded-2xl text-sm"
+      >
+        {renderLogo()}
+        {renderLoginHeader()}
+        {renderEmailInput()}
+        {renderPasswordInput()}
+        {renderSubmitButton()}
       </form>
+    );
+  };
+
+  return (
+    <div className="flex flex-col items-center justify-center bg-white min-w-[300px] min-h-dvh">
+      {renderLoginForm()}
     </div>
   );
 };

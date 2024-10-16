@@ -15,10 +15,10 @@ const ConfirmModal = ({ onClose, isLoading, action, actionHandler }) => {
       case ACTION_TYPES.delete:
         return (
           <>
-            <p className="font-semibold text-lg">
+            <p className="font-semibold text-lg dark:text-slate-200">
               Are you sure you want to delete?
             </p>
-            <p className="text-slate-500 text-xs mt-1">
+            <p className="text-slate-500 text-xs mt-1 dark:text-slate-300">
               This transaction will be deleted immediately. You can’t undo this
               action.
             </p>
@@ -27,16 +27,10 @@ const ConfirmModal = ({ onClose, isLoading, action, actionHandler }) => {
       case ACTION_TYPES.logout:
         return (
           <>
-            <p
-              style={{ color: "rgba(51, 59, 105, 1)" }}
-              className="font-semibold text-lg"
-            >
+            <p className="font-semibold text-lg dark:text-slate-200">
               Are you sure you want to Logout?
             </p>
-            <p
-              style={{ color: "rgba(80, 88, 135, 1)" }}
-              className="text-slate-500 text-xs mt-1"
-            >
+            <p className="text-slate-500 text-xs mt-1 dark:text-slate-300">
               You will be logged out immediately.
             </p>
           </>
@@ -85,7 +79,7 @@ const ConfirmModal = ({ onClose, isLoading, action, actionHandler }) => {
         </button>
         <button
           onClick={handleCloseModal}
-          className="border-slate-200 border-2 w-[120px] text-black rounded-xl py-2"
+          className="border-slate-200 dark:border-slate-600 dark:text-slate-200 border-2 w-[120px] text-black rounded-xl py-2"
         >
           No, Leave it
         </button>
@@ -110,12 +104,12 @@ const ConfirmModal = ({ onClose, isLoading, action, actionHandler }) => {
       }`}
     >
       <div
-        className={`relative flex w-[440px] flex-col justify-center rounded-xl bg-white px-4 py-6 transform transition-transform duration-300 ${
+        className={`relative flex w-[440px] flex-col justify-center rounded-xl dark:bg-slate-800 bg-white px-4 py-6 transform transition-transform duration-300 ${
           isVisible ? "scale-100" : "scale-90"
         }`}
       >
         <button onClick={handleCloseModal} className="absolute right-6 top-4">
-          <IoClose className="text-xl text-slate-600" />
+          <IoClose className="text-xl dark:text-white text-slate-600" />
         </button>
 
         <div className="flex items-start gap-4">

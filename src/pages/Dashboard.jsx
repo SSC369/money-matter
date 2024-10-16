@@ -131,41 +131,43 @@ const Dashboard = () => {
     }
   };
 
+  const renderLatestTransactions = () => {
+    if (isTransactionsLoading) {
+      return (
+        <div className="flex items-center justify-center h-[60dvh]">
+          <Loader />
+        </div>
+      );
+    } else {
+      if (latestTransactions?.length === 0) {
+        return <EmptyView />;
+      } else {
+        return (
+          <ul className="flex gap-2 md:gap-0 md:flex-col flex-wrap  md:bg-white rounded-xl p-2 px-4 mt-2">
+            {getTransactionsData().map((t) => t)}
+          </ul>
+        );
+      }
+    }
+  };
+
   if (transactionsError) {
     return <ErrorPage />;
   }
 
   return (
-    <div className="min-h-dh w-full p-4 bg-slate-100">
+    <div className="min-h-dh w-full p-4 dark:bg-slate-800 bg-slate-100">
+      <h1 className="font-semibold text-xl text-center mb-4 dark:text-slate-200 text-slate-700">
+        Accounts
+      </h1>
       <TotalDebitCredit />
-      <h1
-        className="font-semibold mt-4"
-        style={{ color: "rgba(51, 59, 105, 1)" }}
-      >
+      <h1 className="font-semibold text-xl mt-4 text-center md:text-left dark:text-slate-200">
         Last Transactions
       </h1>
 
-      {isTransactionsLoading ? (
-        <div className="flex items-center justify-center h-[60dvh]">
-          <Loader />
-        </div>
-      ) : (
-        <>
-          {isTransactionsLoading === false &&
-          latestTransactions?.length === 0 ? (
-            <EmptyView />
-          ) : (
-            <ul className="bg-white rounded-xl p-2 px-4 flex flex-col gap-2 mt-2">
-              {getTransactionsData().map((t) => t)}
-            </ul>
-          )}
-        </>
-      )}
-
-      {/* <ChartComponent /> */}
+      {renderLatestTransactions()}
 
       {renderAlertModal()}
-
       {renderEditTransactionModal()}
     </div>
   );

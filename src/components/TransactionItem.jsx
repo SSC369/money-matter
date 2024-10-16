@@ -29,14 +29,14 @@ const TransactionItem = ({
 
   const renderButtons = () => {
     return (
-      <>
+      <div className="flex items-center gap-2 absolute right-4 top-2 md:static">
         <button onClick={handleEditClick}>
           <MdOutlineModeEdit className="text-xl text-blue-400" />
         </button>
         <button onClick={handleDeleteClick}>
           <MdDeleteOutline className="text-xl text-red-400" />
         </button>
-      </>
+      </div>
     );
   };
 
@@ -57,21 +57,20 @@ const TransactionItem = ({
   };
 
   return (
-    <li
-      className={`flex items-center gap-2 border-b-2 p-2 text-sm last:border-none`}
-    >
-      {renderTransactionIcon()}
-      <p className="flex-grow">{transaction_name}</p>
-      <div className="flex items-start justify-between gap-3 max-w-[500px] w-2/4 text-xs lg:text-sm">
-        <p className="text-slate-400 w-1/4 first-letter:capitalize whitespace-normal">
+    <li className="flex flex-col md:flex-row md:justify-between w-full md:items-center gap-2 bg-white dark:bg-slate-700 md:bg-transparent rounded-lg md:border-b-2 p-2 text-sm last:border-none relative">
+      <div className="flex items-center gap-2 text-xs md:text-sm">
+        {renderTransactionIcon()}
+        <p className="max-w-[200px] dark:text-white font-medium">
+          {transaction_name}
+        </p>
+      </div>
+      <div className="flex flex-col md:flex-row items-start justify-between text-xs gap-2 max-w-[500px] md:w-3/4 md:text-sm dark:text-slate-200">
+        <p className=" w-1/4 first-letter:capitalize whitespace-normal">
           {category}
         </p>
-        <p className="text-slate-400  w-[30%]">
-          {dayjs(date).format(DATE_FORMAT)}
-        </p>
+        <p className=" md:w-[30%]">{dayjs(date).format(DATE_FORMAT)}</p>
 
         <p className="font-semibold w-1/4">{renderTransactionAmount()}</p>
-
         {renderButtons()}
       </div>
     </li>

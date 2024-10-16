@@ -122,6 +122,132 @@ const AddTransactionModal = ({ onClose }) => {
     }, 300); // Match the animation duration
   };
 
+  const categoriesDropdown = () => {
+    return (
+      <div className="relative flex flex-col gap-1">
+        <InputLabel name="Category" />
+        <SelectInput
+          onChange={handleChange}
+          value={formData.category}
+          name="category"
+        >
+          {CATEGORY_OPTIONS.map((option) => {
+            const { name, value } = option;
+            return (
+              <option key={value} value={value}>
+                {name}
+              </option>
+            );
+          })}
+        </SelectInput>
+
+        <div className="pointer-events-none absolute top-9 right-3 flex items-center text-slate-600">
+          <FiChevronDown className="w-5 h-5" />
+        </div>
+      </div>
+    );
+  };
+
+  const transactionsDropdown = () => {
+    return (
+      <div className="relative flex flex-col gap-1">
+        <InputLabel name="Transaction Type" />
+        <SelectInput name="type" onChange={handleChange} value={formData.type}>
+          {TRANSACTION_TYPES.map((option) => {
+            const { name, value } = option;
+            return (
+              <option key={value} value={value}>
+                {name}
+              </option>
+            );
+          })}
+        </SelectInput>
+
+        <div className="pointer-events-none absolute top-9 right-3 flex items-center text-slate-600">
+          <FiChevronDown className="w-5 h-5" />
+        </div>
+      </div>
+    );
+  };
+
+  const renderNameInput = () => {
+    return (
+      <InputElement
+        required
+        name="name"
+        type="text"
+        placeholder="Enter Name"
+        onChange={handleChange}
+        value={formData.name}
+      />
+    );
+  };
+
+  const renderAmountInput = () => {
+    return (
+      <InputElement
+        required
+        onChange={handleChange}
+        value={formData.amount}
+        type="number"
+        name="amount"
+        placeholder="Enter Amount"
+      />
+    );
+  };
+
+  const renderDateInput = () => {
+    return (
+      <InputElement
+        required
+        type="datetime-local"
+        placeholder="Enter Date"
+        onChange={handleChange}
+        value={formData.date}
+        name="date"
+      />
+    );
+  };
+
+  const renderFormCloseButton = () => {
+    return (
+      <button onClick={handleCloseModal} className="absolute right-6 top-4">
+        <IoClose className="text-xl text-slate-600 dark:text-white" />
+      </button>
+    );
+  };
+
+  const renderAddTransactionHeaders = () => {
+    return (
+      <>
+        <h1 className="text-xl dark:text-slate-200 font-semibold">
+          Add Transaction
+        </h1>
+        {renderFormCloseButton()}
+        <p className="text-slate-500 dark:text-slate-300 text-xs mt-2">
+          Add your transaction
+        </p>
+      </>
+    );
+  };
+
+  const renderTransactionAddForm = () => {
+    return (
+      <form
+        onSubmit={handleAddTransaction}
+        className="flex flex-col gap-3 mt-3"
+      >
+        {renderNameInput()}
+        {transactionsDropdown()}
+        {categoriesDropdown()}
+        {renderAmountInput()}
+        {renderDateInput()}
+
+        <LoadingButton action={ACTION_TYPES.add} isLoading={addLoading} />
+      </form>
+    );
+  };
+
   return (
     <div
       className={`fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-60 transition-opacity duration-300 ${
@@ -129,103 +255,12 @@ const AddTransactionModal = ({ onClose }) => {
       }`}
     >
       <div
-        className={`relative flex  w-[400px] flex-col justify-center rounded-xl bg-white px-4 py-6 transform transition-transform duration-300 ${
+        className={`relative flex  w-[400px] flex-col justify-center rounded-xl dark:bg-slate-800 bg-white px-4 py-6 transform transition-transform duration-300 ${
           isVisible ? "scale-100" : "scale-90"
         }`}
       >
-        <h1 className="text-xl font-semibold">Add Transaction</h1>
-        <button onClick={handleCloseModal} className="absolute right-6 top-4">
-          <IoClose className="text-xl text-slate-600" />
-        </button>
-
-        <p className="text-slate-500 text-xs mt-2">Add your transaction</p>
-
-        <form
-          onSubmit={handleAddTransaction}
-          className="flex flex-col gap-3 mt-3"
-        >
-          <InputContainer>
-            <InputLabel name="Transaction Name" />
-            <InputElement
-              required
-              name="name"
-              type="text"
-              placeholder="Enter Name"
-              onChange={handleChange}
-              value={formData.name}
-            />
-          </InputContainer>
-
-          <div className="relative flex flex-col gap-1">
-            <InputLabel name="Transaction Type" />
-            <SelectInput
-              name="type"
-              onChange={handleChange}
-              value={formData.type}
-            >
-              {TRANSACTION_TYPES.map((option) => {
-                const { name, value } = option;
-                return (
-                  <option key={value} value={value}>
-                    {name}
-                  </option>
-                );
-              })}
-            </SelectInput>
-
-            <div className="pointer-events-none absolute top-9 right-3 flex items-center text-slate-600">
-              <FiChevronDown className="w-5 h-5" />
-            </div>
-          </div>
-
-          <div className="relative flex flex-col gap-1">
-            <InputLabel name="Category" />
-            <SelectInput
-              onChange={handleChange}
-              value={formData.category}
-              name="category"
-            >
-              {CATEGORY_OPTIONS.map((option) => {
-                const { name, value } = option;
-                return (
-                  <option key={value} value={value}>
-                    {name}
-                  </option>
-                );
-              })}
-            </SelectInput>
-
-            <div className="pointer-events-none absolute top-9 right-3 flex items-center text-slate-600">
-              <FiChevronDown className="w-5 h-5" />
-            </div>
-          </div>
-
-          <InputContainer>
-            <InputLabel name="Amount" />
-            <InputElement
-              required
-              onChange={handleChange}
-              value={formData.amount}
-              type="number"
-              name="amount"
-              placeholder="Enter Amount"
-            />
-          </InputContainer>
-
-          <InputContainer>
-            <InputLabel name="Date" />
-            <InputElement
-              required
-              type="datetime-local"
-              placeholder="Enter Date"
-              onChange={handleChange}
-              value={formData.date}
-              name="date"
-            />
-          </InputContainer>
-
-          <LoadingButton action={ACTION_TYPES.add} isLoading={addLoading} />
-        </form>
+        {renderAddTransactionHeaders()}
+        {renderTransactionAddForm()}
       </div>
     </div>
   );

@@ -7,10 +7,10 @@ import { UserContext } from "../context/userContext";
 import { SIDEBAR_OPTIONS } from "../constants";
 
 const SidebarOption = ({ option }) => {
+  const { isAdmin, setShowMenu } = useContext(UserContext);
   const navigate = useNavigate();
   const path = window.location.pathname;
 
-  const { isAdmin } = useContext(UserContext);
   const currentPath = "/" + option;
 
   //convert the if conditions to switch case
@@ -51,11 +51,15 @@ const SidebarOption = ({ option }) => {
     return <></>;
   };
 
+  const handleClickSidebarOption = () => {
+    navigate(currentPath);
+  };
+
   return (
     <li
-      onClick={() => navigate(currentPath)}
+      onClick={handleClickSidebarOption}
       style={isCurrentPath ? { color: "rgba(45, 96, 255, 1)" } : {}}
-      className="flex items-center gap-3 text-slate-500 relative pl-8 h-16 cursor-pointer"
+      className="flex items-center gap-3 text-slate-500 dark:text-white relative pl-8 h-16 cursor-pointer"
     >
       {renderPointer()}
       {renderOption()}

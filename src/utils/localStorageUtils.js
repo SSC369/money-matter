@@ -1,5 +1,5 @@
 export const removeDataFromLocalStorage = (key) => {
-  localStorage.removeItem(item);
+  localStorage.removeItem(key);
 };
 
 export const addDataIntoLocalStorage = (key, data) => {

@@ -18,6 +18,7 @@ import {
 import { UserContext } from "../context/userContext";
 import ErrorPage from "../components/ErrorPage";
 import { TRANSACTION_HEADERS } from "../utils/headerUtils";
+import TransactionOption from "../components/TransactionOption";
 
 const Transactions = () => {
   const [showAlertModal, setShowAlertModal] = useState(false);
@@ -178,7 +179,7 @@ const Transactions = () => {
             {transactions?.length === 0 ? (
               <EmptyView />
             ) : (
-              <ul className="bg-white rounded-xl p-2 px-4 flex flex-col gap-2 mt-2">
+              <ul className="flex gap-2 md:gap-0 md:flex-col flex-wrap md:bg-white rounded-xl p-2 px-4 mt-2">
                 {renderTransactionDataByTab()}
               </ul>
             )}
@@ -227,12 +228,30 @@ const Transactions = () => {
     }
   };
 
+  const renderTransactionTabs = () => {
+    const options = Object.keys(TAB_OPTIONS);
+    return (
+      <ul
+        style={{ color: "rgba(113, 142, 191, 1)" }}
+        className="flex md:hidden items-center gap-6 text-sm mx-auto w-fit mb-6"
+      >
+        {options.map((option) => (
+          <TransactionOption key={option} option={option} />
+        ))}
+      </ul>
+    );
+  };
+
   if (transactionsError) {
     return <ErrorPage />;
   }
 
   return (
-    <div className="min-h-dh w-full p-4 bg-slate-100">
+    <div className="min-h-dh w-full p-4 bg-slate-100 dark:bg-slate-800">
+      <h1 className="md:none text-xl dark:text-slate-200 font-semibold text-center mb-4">
+        Transactions
+      </h1>
+      {renderTransactionTabs()}
       {RenderTransactions(activeTab)}
       {renderEditTransactionModal()}
       {renderConfirmModal()}

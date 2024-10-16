@@ -3,6 +3,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { FaCircleUser } from "react-icons/fa6";
 import { LuLogOut } from "react-icons/lu";
 import toast from "react-hot-toast";
+import { IoClose } from "react-icons/io5";
 
 import SidebarOption from "./SidebarOption";
 import ConfirmModal from "./ConfirmModal";
@@ -18,14 +19,19 @@ import {
 } from "../constants";
 import { removeDataFromLocalStorage } from "../utils/localStorageUtils";
 import { TRANSACTION_HEADERS } from "../utils/headerUtils";
+import ToggleButton from "./ToggleButton";
 
 const Sidebar = () => {
   //Boolean naming format
   const [showAlertModal, setShowAlertModal] = useState(false);
   const [userData, setUserData] = useState(null);
   const [isLogoutLoading, setIsLogoutLoading] = useState(false);
-  const { userId } = useContext(UserContext);
+  const { userId, showMenu, setShowMenu } = useContext(UserContext);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    fetchUserProfile();
+  }, []);
 
   function handleProfileFetchSuccess(res) {
     const { data } = res;
@@ -47,9 +53,6 @@ const Sidebar = () => {
       toast.error(error.message);
     }
   };
-  useEffect(() => {
-    fetchUserProfile();
-  }, []);
 
   const handleLogout = () => {
     try {
@@ -66,7 +69,7 @@ const Sidebar = () => {
     return (
       <h1
         style={{ color: "rgba(248, 154, 35, 1)" }}
-        className="font-bold text-xl text-center"
+        className="font-bold hidden md:block text-xl text-center mb-6"
       >
         Money{" "}
         <span className="" style={{ color: "rgba(2, 150, 156, 1)" }}>
@@ -79,7 +82,7 @@ const Sidebar = () => {
   const renderOptions = () => {
     const options = Object.keys(SIDEBAR_OPTIONS);
     return (
-      <ul className="flex flex-col w-full mt-6">
+      <ul className="flex flex-col w-full">
         {options.map((option) => (
           <SidebarOption key={option} option={option} />
         ))}
@@ -97,15 +100,8 @@ const Sidebar = () => {
         <FaCircleUser className="text-2xl text-blue-600" />
 
         <div className="flex flex-col flex-grow text-xs">
-          <p className="font-medium" style={{ color: "rgba(80, 88, 135, 1)" }}>
-            {userData?.name}
-          </p>
-          <p
-            className="font-medium"
-            style={{ color: "rgba(113, 142, 191, 1)" }}
-          >
-            {userData?.email}
-          </p>
+          <p className="font-medium dark:text-white">{userData?.name}</p>
+          <p className="font-medium text-slate-400">{userData?.email}</p>
         </div>
 
         {/* //Give this "setAlertModal" call back to button onclick */}
@@ -130,9 +126,24 @@ const Sidebar = () => {
     return <></>;
   };
 
+  const handleMenuClose = () => {
+    setShowMenu(false);
+  };
+
   return (
-    <div className="min-w-[200px] z-50 fixed flex flex-col bg-white py-4 min-h-dvh border-r-2 border-r-slate-100">
+    <div
+      style={
+        !showMenu
+          ? { display: "none" }
+          : { display: "flex", justifyContent: "space-between" }
+      }
+      className="min-w-[200px] md:flex z-50 fixed shadow-lg shadow-slate-300 md:shadow-none flex-col bg-white md:py-4 py-2 min-h-dvh md:border-r-2 md:border-r-slate-100 dark:shadow-slate-500 pb-4 dark:bg-slate-800"
+    >
       {renderHeader()}
+
+      <button onClick={handleMenuClose} className="md:hidden self-end mr-2">
+        <IoClose className="text-xl dark:text-white" />
+      </button>
       {renderOptions()}
       {renderProfile()}
       {renderConfirmModal()}

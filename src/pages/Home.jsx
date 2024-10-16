@@ -5,10 +5,12 @@ import Sidebar from "../components/Sidebar";
 import Header from "../components/Header";
 import { TransactionContext } from "../context/transactionContext";
 import AddTransactionModal from "../components/AddTransactionModal";
+import { ThemeContext, ThemeContextProvider } from "../context/themeContext";
 
 const Home = () => {
   const { showAddTransactionModal, setShowAddTransactionModal } =
     useContext(TransactionContext);
+  const { isDarkMode } = useContext(ThemeContext);
 
   const renderAddTransactionModal = () => {
     if (showAddTransactionModal) {
@@ -22,9 +24,9 @@ const Home = () => {
   };
 
   return (
-    <div className="relative">
+    <div className={`relative ${isDarkMode ? "dark" : ""}`}>
       <Sidebar />
-      <div className="ml-[200px]">
+      <div className="md:ml-[200px] ">
         <Header />
         <Outlet />
       </div>

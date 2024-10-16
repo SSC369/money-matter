@@ -14,6 +14,7 @@ import {
 } from "./constants";
 import { UserContextProvider } from "./context/userContext";
 import { TransactionContextProvider } from "./context/transactionContext";
+import { ThemeContextProvider } from "./context/themeContext";
 
 const App = () => {
   return (
@@ -26,7 +27,9 @@ const App = () => {
           element={
             <UserContextProvider>
               <TransactionContextProvider>
-                <Home />
+                <ThemeContextProvider>
+                  <Home />
+                </ThemeContextProvider>
               </TransactionContextProvider>
             </UserContextProvider>
           }

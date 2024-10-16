@@ -42,7 +42,7 @@ const TotalDebitCredit = () => {
           <Loader />
         </div>
       ) : (
-        <div className="flex items-center gap-4 justify-around mx-auto">
+        <div className="flex flex-col md:flex-row  items-center gap-4 justify-around mx-auto">
           {totalDebitCreditTransactionsData?.map((total, index) => {
             const { type, sum } = total;
 
@@ -51,7 +51,7 @@ const TotalDebitCredit = () => {
             return (
               <div
                 key={index}
-                className="flex items-start bg-white rounded-xl p-2 pl-6 justify-between w-2/4 "
+                className="flex items-start bg-white dark:bg-slate-700 rounded-xl p-2 pl-6 justify-between w-3/4 md:w-2/4 "
               >
                 <div>
                   <p
@@ -64,10 +64,7 @@ const TotalDebitCredit = () => {
                   >
                     ${sum}
                   </p>
-                  <p
-                    className="text-sm"
-                    style={{ color: "rgba(113, 142, 191, 1)" }}
-                  >
+                  <p className="text-sm dark:text-slate-200 text-slate-600">
                     {type}
                   </p>
                 </div>
