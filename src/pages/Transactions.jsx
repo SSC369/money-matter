@@ -168,25 +168,23 @@ const Transactions = () => {
   };
 
   const RenderTransactions = () => {
-    return (
-      <>
-        {isTransactionsLoading ? (
-          <div className="flex items-center justify-center h-[60dvh]">
-            <Loader />
-          </div>
-        ) : (
-          <>
-            {transactions?.length === 0 ? (
-              <EmptyView />
-            ) : (
-              <ul className="flex gap-2 md:gap-0 md:flex-col flex-wrap  md:dark:bg-slate-700 md:bg-white rounded-xl p-2 px-4 mt-2">
-                {renderTransactionDataByTab()}
-              </ul>
-            )}
-          </>
-        )}
-      </>
-    );
+    if (isTransactionsLoading) {
+      return (
+        <div className="flex items-center justify-center h-[60dvh]">
+          <Loader />
+        </div>
+      );
+    } else {
+      if (transactions?.length === 0) {
+        return <EmptyView />;
+      } else {
+        return (
+          <ul className="flex gap-2 md:gap-0 md:flex-col flex-wrap  md:dark:bg-slate-700 md:bg-white rounded-xl p-2 px-4 mt-2">
+            {renderTransactionDataByTab()}
+          </ul>
+        );
+      }
+    }
   };
 
   const renderConfirmModal = () => {
@@ -248,7 +246,7 @@ const Transactions = () => {
 
   return (
     <div className="min-h-dh w-full p-4 bg-slate-100 dark:bg-slate-800">
-      <h1 className="md:none text-xl dark:text-slate-200 font-semibold text-center mb-4">
+      <h1 className="md:hidden text-xl dark:text-slate-200 font-semibold text-center mb-4">
         Transactions
       </h1>
       {renderTransactionTabs()}

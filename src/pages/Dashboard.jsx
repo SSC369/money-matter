@@ -157,7 +157,7 @@ const Dashboard = () => {
 
   return (
     <div className="min-h-dh w-full p-4 dark:bg-slate-800 bg-slate-100">
-      <h1 className="font-semibold text-xl text-center mb-4 dark:text-slate-200 text-slate-700">
+      <h1 className="font-semibold text-xl text-center mb-4 dark:text-slate-200 text-slate-700 md:hidden">
         Accounts
       </h1>
       <TotalDebitCredit />
