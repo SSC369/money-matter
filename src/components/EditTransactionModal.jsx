@@ -215,8 +215,11 @@ const EditTransactionModal = ({ onClose, data }) => {
 
   const renderFormCloseButton = () => {
     return (
-      <button onClick={handleCloseModal} className="absolute right-6 top-4">
-        <IoClose className="text-xl text-slate-600 d+ark:text-white" />
+      <button
+        onClick={handleCloseModal}
+        className="absolute right-6 top-4 group"
+      >
+        <IoClose className="text-xl text-slate-600 d+ark:text-white group-hover:text-white" />
       </button>
     );
   };

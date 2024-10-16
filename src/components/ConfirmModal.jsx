@@ -60,7 +60,7 @@ const ConfirmModal = ({ onClose, isLoading, action, actionHandler }) => {
       <div className="flex items-center gap-4 mt-4 text-sm">
         <button
           onClick={actionHandler}
-          className="bg-red-600 text-white rounded-xl py-2 w-[120px] flex items-center justify-center"
+          className="bg-red-600 hover:bg-red-500 text-white rounded-xl py-2 w-[120px] flex items-center justify-center"
         >
           {isLoading ? (
             <TailSpin
@@ -79,7 +79,7 @@ const ConfirmModal = ({ onClose, isLoading, action, actionHandler }) => {
         </button>
         <button
           onClick={handleCloseModal}
-          className="border-slate-200 dark:border-slate-600 dark:text-slate-200 border-2 w-[120px] text-black rounded-xl py-2"
+          className="border-slate-200 dark:border-slate-600 dark:text-slate-200 border-2 w-[120px] text-black rounded-xl py-2 hover:bg-slate-600"
         >
           No, Leave it
         </button>

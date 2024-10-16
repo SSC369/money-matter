@@ -7,7 +7,7 @@ import { getDataFromLocalStorage } from "../utils/localStorageUtils";
 export const UserContext = createContext({});
 
 export const UserContextProvider = ({ children }) => {
-  const [showMenu, setShowMenu] = useState(false);
+  const [showMenu, setShowMenu] = useState(true);
 
   const navigate = useNavigate();
   const userData = getDataFromLocalStorage(LOCALSTORAGE_KEY);

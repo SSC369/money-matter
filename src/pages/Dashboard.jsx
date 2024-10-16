@@ -143,7 +143,7 @@ const Dashboard = () => {
         return <EmptyView />;
       } else {
         return (
-          <ul className="flex gap-2 md:gap-0 md:flex-col flex-wrap  md:bg-white rounded-xl p-2 px-4 mt-2">
+          <ul className="flex gap-2 md:gap-0 md:flex-col flex-wrap  md:dark:bg-slate-700 md:bg-white rounded-xl p-2 px-4 mt-2">
             {getTransactionsData().map((t) => t)}
           </ul>
         );
@@ -161,7 +161,7 @@ const Dashboard = () => {
         Accounts
       </h1>
       <TotalDebitCredit />
-      <h1 className="font-semibold text-xl mt-4 text-center md:text-left dark:text-slate-200">
+      <h1 className="font-semibold mt-4 text-center md:text-left text-xl dark:text-slate-200">
         Last Transactions
       </h1>
 

@@ -35,7 +35,7 @@ const LoadingButton = ({ action, isLoading }) => {
   return (
     <button
       type="submit"
-      className="flex justify-center items-center mt-5  bg-blue-500 text-white font-medium text-sm rounded-lg h-12 w-full "
+      className="flex justify-center items-center mt-5  bg-blue-500 hover:bg-blue-400 text-white font-medium text-sm rounded-lg h-12 w-full "
     >
       {renderButtonContent()}
     </button>

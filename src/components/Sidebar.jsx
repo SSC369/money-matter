@@ -19,14 +19,13 @@ import {
 } from "../constants";
 import { removeDataFromLocalStorage } from "../utils/localStorageUtils";
 import { TRANSACTION_HEADERS } from "../utils/headerUtils";
-import ToggleButton from "./ToggleButton";
 
 const Sidebar = () => {
-  //Boolean naming format
   const [showAlertModal, setShowAlertModal] = useState(false);
   const [userData, setUserData] = useState(null);
   const [isLogoutLoading, setIsLogoutLoading] = useState(false);
   const { userId, showMenu, setShowMenu } = useContext(UserContext);
+
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -133,11 +132,11 @@ const Sidebar = () => {
   return (
     <div
       style={
-        !showMenu
-          ? { display: "none" }
-          : { display: "flex", justifyContent: "space-between" }
+        showMenu
+          ? { display: "flex", justifyContent: "space-between" }
+          : { display: "none" }
       }
-      className="min-w-[200px] md:flex z-50 fixed shadow-lg shadow-slate-300 md:shadow-none flex-col bg-white md:py-4 py-2 min-h-dvh md:border-r-2 md:border-r-slate-100 dark:shadow-slate-500 pb-4 dark:bg-slate-800"
+      className="min-w-[200px] md:flex z-50 fixed shadow-lg shadow-slate-300 md:shadow-none flex-col bg-white md:py-4 py-2 min-h-dvh md:border-r-2 md:border-r-slate-100 dark:border-r-slate-600 dark:shadow-slate-500 pb-4 dark:bg-slate-800"
     >
       {renderHeader()}
 

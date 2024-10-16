@@ -57,7 +57,7 @@ const TransactionItem = ({
   };
 
   return (
-    <li className="flex flex-col md:flex-row md:justify-between w-full md:items-center gap-2 bg-white dark:bg-slate-700 md:bg-transparent rounded-lg md:border-b-2 p-2 text-sm last:border-none relative">
+    <li className="flex flex-col md:flex-row md:justify-between w-full md:items-center gap-2 bg-white dark:bg-slate-700 md:bg-transparent md:rounded-none rounded-lg md:border-b-2 p-2 text-sm last:border-none relative dark:border-slate-600">
       <div className="flex items-center gap-2 text-xs md:text-sm">
         {renderTransactionIcon()}
         <p className="max-w-[200px] dark:text-white font-medium">

@@ -115,7 +115,7 @@ const Transactions = () => {
         );
       }
     });
-    console.log(filteredData);
+
     if (filteredData.length === 0) {
       return <EmptyView />;
     }
@@ -179,7 +179,7 @@ const Transactions = () => {
             {transactions?.length === 0 ? (
               <EmptyView />
             ) : (
-              <ul className="flex gap-2 md:gap-0 md:flex-col flex-wrap md:bg-white rounded-xl p-2 px-4 mt-2">
+              <ul className="flex gap-2 md:gap-0 md:flex-col flex-wrap  md:dark:bg-slate-700 md:bg-white rounded-xl p-2 px-4 mt-2">
                 {renderTransactionDataByTab()}
               </ul>
             )}

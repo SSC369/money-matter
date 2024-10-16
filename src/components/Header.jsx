@@ -91,7 +91,7 @@ const Header = () => {
 
   return (
     <header className="min-h-[80px] dark:bg-slate-800 py-4 px-4 border-b-2 relative flex items-center md:block dark:border-b-slate-600">
-      <div className="hidden md:flex items-center justify-between">
+      <div className="hidden dark:text-slate-200 md:flex items-center justify-between">
         {renderHeaderName()}
         {renderAddTransactionButton()}
       </div>

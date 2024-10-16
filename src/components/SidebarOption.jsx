@@ -28,7 +28,7 @@ const SidebarOption = ({ option }) => {
         return (
           <>
             <TbReceiptDollar className="text-xl" />
-            <p className="font-medium text-base first-letter:capitalize">
+            <p className="font-medium text-base first-letter:capitalize ">
               {isAdmin
                 ? "All " + SIDEBAR_OPTIONS.transactions
                 : SIDEBAR_OPTIONS.transactions}
@@ -59,7 +59,7 @@ const SidebarOption = ({ option }) => {
     <li
       onClick={handleClickSidebarOption}
       style={isCurrentPath ? { color: "rgba(45, 96, 255, 1)" } : {}}
-      className="flex items-center gap-3 text-slate-500 dark:text-white relative pl-8 h-16 cursor-pointer"
+      className="flex items-center gap-3 text-slate-500 relative pl-8 h-16 cursor-pointer dark:text-slate-200"
     >
       {renderPointer()}
       {renderOption()}
