@@ -1,12 +1,19 @@
-import { createContext, useState } from "react";
+import { createContext, useEffect, useState } from "react";
+import { LIGHT_MODE_KEY, THEME_KEY } from "../constants";
 
 export const ThemeContext = createContext();
 
 export const ThemeContextProvider = ({ children }) => {
-  const [isDarkMode, setIsDarkMode] = useState(null);
+  const [theme, setTheme] = useState(LIGHT_MODE_KEY);
+
+  useEffect(() => {
+    const themeFromLocalStorage =
+      localStorage.getItem(THEME_KEY) || LIGHT_MODE_KEY;
+    setTheme(themeFromLocalStorage);
+  }, []);
 
   return (
-    <ThemeContext.Provider value={{ isDarkMode, setIsDarkMode }}>
+    <ThemeContext.Provider value={{ theme, setTheme }}>
       {children}
     </ThemeContext.Provider>
   );

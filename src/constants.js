@@ -67,3 +67,6 @@ export const SUCCESS_OK = 200;
 export const SUCCESS_CREATED = 201;
 export const TRANSACTIONS_LIMIT = 100;
 export const TRANSACTIONS_OFFSET = 0;
+export const THEME_KEY = "theme";
+export const LIGHT_MODE_KEY = "light";
+export const DARK_MODE_KEY = "dark";

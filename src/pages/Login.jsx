@@ -20,7 +20,6 @@ import {
 
 const Login = ({ admin }) => {
   const [showPassword, setShowPassword] = useState(false);
-
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -37,13 +36,11 @@ const Login = ({ admin }) => {
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
-
   const handleValidation = () => {
     const { password, email } = formData;
     const trimEmail = email.trim();
     const trimPassword = password.trim();
     if (trimEmail === "") {
-      //Add toast utils and use the showSuccessToast and showFailureToast
       toast.error("Please enter email !", { duration: 1000 });
       return false;
     } else if (trimPassword === "") {
@@ -226,7 +223,7 @@ const Login = ({ admin }) => {
     return (
       <form
         onSubmit={handleSubmit}
-        className="shadow-2xl flex flex-col gap-3 bg-white p-8 w-4/5 max-w-md min-w-[300px] rounded-2xl text-sm"
+        className="shadow-2xl flex flex-col gap-3 bg-white dark:bg-slate-800 p-8 w-4/5 max-w-md min-w-[300px] rounded-2xl text-sm"
       >
         {renderLogo()}
         {renderLoginHeader()}
